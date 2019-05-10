@@ -15,6 +15,13 @@
 	</properties>
 
 	<dependencies>
+		<!-- link backend projects -->
+		<dependency>
+			<groupId>com.example</groupId>
+			<artifactId>shoppingbackend</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
 		<!-- java ee api -->
 		<!-- https://mvnrepository.com/artifact/javax/javaee-api -->
 		<dependency>
@@ -36,16 +43,16 @@
 		<!-- sprind dependency -->
 
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
 
-	<!-- JSTL -->
-	
-	<dependency>
+		<!-- JSTL -->
+
+		<dependency>
 			<groupId>jstl</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
