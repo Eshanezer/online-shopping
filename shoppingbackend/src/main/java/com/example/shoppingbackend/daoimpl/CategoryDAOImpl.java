@@ -1,60 +1,77 @@
 package com.example.shoppingbackend.daoimpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.shoppingbackend.dao.CategoryDAO;
 import com.example.shoppingbackend.dto.Category;
 
 @Repository("CategoryDAO")
+@Transactional
 public class CategoryDAOImpl implements CategoryDAO {
 
-	private static  List<Category> categories =new ArrayList<Category>();
+	@Autowired
+	private SessionFactory sessionFactory;
 	
-	static {
-		
-		Category  category =new Category();
-		category.setId(1);
-		category.setName("Television");
-		category.setDescription("all tv categories here");
-		category.setImgurl("tv.png");
-		
-		categories.add(category);
-		
-		category =new Category();
-		category.setId(2);
-		category.setName("Mobile");
-		category.setDescription("all mobile categories here");
-		category.setImgurl("mobile.png");
-		
-		categories.add(category);
-		
-		category =new Category();
-		category.setId(3);
-		category.setName("Laptop");
-		category.setDescription("all laptop categories here");
-		category.setImgurl("laptop.png");
-		
-		categories.add(category);
-		
-	}
 	
 	@Override
 	public List<Category> list() {
-		// TODO Auto-generated method stub
-		return categories;
+	
+		String selectActiveCategories ="FROM Category WHERE active=:active";
+		
+		Query query = sessionFactory.getCurrentSession().createQuery(selectActiveCategories);
+		query.setParameter("active",true);
+		
+		return query.getResultList();
 	}
 
+//	getting a single category based in id
 	@Override
 	public Category get(int id) {
 		
-		for(Category category :categories) {
-			if(category.getId()==id) return category;
+		return sessionFactory.getCurrentSession().get(Category.class,Integer.valueOf(id));
+	}
+
+	// add to data to database
+	@Override
+	public Boolean add(Category category) {
+		try {
+			sessionFactory.getCurrentSession().persist(category);
+			
+			return true;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return false;
 		}
 		
-		return null;
+	}
+
+	/* update added category */
+	@Override
+	public Boolean update(Category category) {
+		try {
+			sessionFactory.getCurrentSession().update(category);
+			return true;
+		}catch(Exception ex) {
+			return false;
+		}
+		
+	}
+
+	@Override
+	public Boolean delete(Category category) {
+		category.setActive(false);
+		try {
+			sessionFactory.getCurrentSession().update(category);
+			return true;
+		}catch(Exception ex) {
+			return false;
+		}
 	}
 
 }

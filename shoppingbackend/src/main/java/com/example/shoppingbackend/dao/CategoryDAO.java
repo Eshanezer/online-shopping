@@ -6,7 +6,14 @@ import com.example.shoppingbackend.dto.Category;
 
 public interface CategoryDAO {
 
-	List<Category> list();
+	Boolean add(Category category);
 	
+	List<Category> list();
+
 	Category get(int id);
+	
+	Boolean update(Category category);
+	
+	Boolean delete(Category category);
+	
 }
